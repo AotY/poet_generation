@@ -158,6 +158,22 @@ def train_epoch():
         # evaluate
         evaluate()
 
+        # save model of each epoch
+        save_state = {
+            'loss': avg_loss,
+            'epoch': epoch,
+            'state_dict': model.state_dict(),
+            'optimizer': optimizer.state_dict()
+        }
+
+        # save checkpoint, including epoch, seq2seq_mode.state_dict() and
+        # optimizer.state_dict()
+        save_checkpoint(state=save_state,
+                        is_best=False,
+                        filename=os.path.join(opt.model_path, 'checkpoint.epoch-%d.pth' % (epoch)))
+
+
+
 
 def evaluate():
     model.eval()
@@ -193,6 +209,17 @@ def evaluate():
                 start_time = time.time()
 
 
+def save_checkpoint(state, is_best, filename):
+    '''
+    Saving a model in pytorch.
+    :param state: is a dict object, including epoch, optimizer, model etc.
+    :param is_best: whether is the best model.
+    :param filename: save filename.
+    :return:
+    '''
+    torch.save(state, filename)
+    if is_best:
+        shutil.copy(filename, 'model_best_%s.pth' % opt.model_type)
 
 if __name__ == '__main__':
     train_epoch()

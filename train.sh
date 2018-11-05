@@ -25,6 +25,6 @@ python train.py \
     --seed 7 \
     --device cuda \
     --log_interval 100 \
-    --model_path ./models/model.pth
+    --model_path ./models
 
 /
