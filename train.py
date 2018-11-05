@@ -155,6 +155,9 @@ def train_epoch():
                 total_loss = 0
                 start_time = time.time()
 
+        # evaluate
+        evaluate()
+
 
 def evaluate():
     model.eval()

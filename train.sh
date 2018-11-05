@@ -7,7 +7,7 @@
 #
 
 
-export CUDA_VISIBLE_DEVICES=5
+export CUDA_VISIBLE_DEVICES=7
 
 python train.py \
     --data_path ./data/poet_tang_simplified.txt \
@@ -23,7 +23,7 @@ python train.py \
     --tied \
     --epochs 10 \
     --seed 7 \
-    --device cpu \
+    --device cuda \
     --log_interval 100 \
     --model_path ./models/model.pth
 

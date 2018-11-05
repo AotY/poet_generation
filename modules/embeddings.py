@@ -115,8 +115,7 @@ class Embeddings(nn.Module):
         elif feat_vec_size > 0:
             feat_dims = [feat_vec_size] * len(feat_vocab_sizes)
         else:
-            feat_dims = [int(vocab ** feat_vec_exponent)
-                         for vocab in feat_vocab_sizes]
+            feat_dims = [int(vocab ** feat_vec_exponent) for vocab in feat_vocab_sizes]
 
         vocab_sizes.extend(feat_vocab_sizes)
         emb_dims.extend(feat_dims)
@@ -125,6 +124,7 @@ class Embeddings(nn.Module):
         # The embedding matrix look-up tables. The first look-up table
         # is for words. Subsequent ones are for features, if any exist.
         emb_params = zip(vocab_sizes, emb_dims, pad_indices)
+
         embeddings = [nn.Embedding(vocab, dim, padding_idx=pad, sparse=sparse)
                       for vocab, dim, pad in emb_params]
 
@@ -134,8 +134,7 @@ class Embeddings(nn.Module):
         # from the word vector size if and only if features are defined.
         # This is the attribute you should access if you need to know
         # how big your embeddings are going to be.
-        self.embedding_size = (sum(emb_dims) if feat_merge == 'concat'
-                               else word_vec_size)
+        self.embedding_size = (sum(emb_dims) if feat_merge == 'concat' else word_vec_size)
 
         # The sequence of operations that converts the input sequence
         # into a sequence of embeddings. At minimum this consists of
@@ -143,6 +142,7 @@ class Embeddings(nn.Module):
         # input. Model parameters may require the sequence to contain
         # additional operations as well.
         super(Embeddings, self).__init__()
+
         self.make_embedding = nn.Sequential()
         self.make_embedding.add_module('emb_luts', emb_luts)
 
