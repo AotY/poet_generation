@@ -83,6 +83,9 @@ class PoetDataset:
             'test': 0
         }
 
+    def author_index(self, author):
+        return self._authors.index(author)
+
     def reset_data(self, task):
         np.random.shuffle(self._data_dict[task])
         self._indicator_dict[task] = 0
@@ -121,7 +124,8 @@ class PoetDataset:
             tags_tensor = torch.tensor(tags_ids, dtype=torch.long, device=self.device).view(-1, 1)
 
         return row_tensor, column_tensor, author_tensor, \
-            title_tensor, paragraphs_tensor, tags_tensor
+            title_tensor, paragraphs_tensor, tags_tensor, \
+            paragraphs
 
     def next_batch(self, task):
         pass

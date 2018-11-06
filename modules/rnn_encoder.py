@@ -64,7 +64,7 @@ class RNNEncoder(EncoderBase):
         emb = self.embeddings(src) #[len, 1, embedding_size]
 
         # concat row, column, author information
-        emb = torch.cat((emb, row_embedded, column_embedded, author_embedded), dim=0)
+        emb = torch.cat((row_embedded, column_embedded, author_embedded, emb), dim=0)
 
         packed_emb = emb
         if lengths is not None and not self.no_pack_padded_seq:

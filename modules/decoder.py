@@ -127,6 +127,7 @@ class RNNDecoderBase(nn.Module):
         self.state["input_feed"] = self.state["hidden"][0].data.new(*h_size).zero_().unsqueeze(0)
         self.state["coverage"] = None
 
+
     def update_state(self, rnnstate, input_feed, coverage):
         """ Update decoder state """
         if not isinstance(rnnstate, tuple):
@@ -146,8 +147,7 @@ class RNNDecoderBase(nn.Module):
                                      for _ in self.state["hidden"]])
         self.state["input_feed"] = self.state["input_feed"].detach()
 
-    def forward(self, tgt, memory_bank, memory_lengths=None,
-                step=None):
+    def forward(self, tgt, memory_bank, memory_lengths=None, step=None):
         """
         Args:
             tgt (`LongTensor`): sequences of padded tokens

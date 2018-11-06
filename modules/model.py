@@ -51,7 +51,8 @@ class PoetGenModel(nn.Module):
         encoder_embedding = embeddings.Embeddings(
             embedding_size,
             vocab_size,
-            word_padding_idx=0
+            word_padding_idx=0,
+            dropout=dropout
         )
         self.encoder = RNNEncoder(
             rnn_type,
@@ -102,7 +103,7 @@ class PoetGenModel(nn.Module):
         hidden_final, memory_bank, _ = self.encoder(title_tensor, row_embedded, column_embedded, author_embedded)
 
         # hidden_final: [num_layers * bidirection_num, 1, hidden_size // 2]
-        decoder_hidden = self.decoder.init_state(hidden_final)
+        self.decoder.init_state(hidden_final)
 
         output, attn = self.decoder(paragraphs_tensor, memory_bank)
         # output: [len, 1, hidden_size]
@@ -112,6 +113,40 @@ class PoetGenModel(nn.Module):
         output = self.log_softmax(output) # [len, 1, vocab_size]
 
         return output
+
+
+    def generate(self,
+                 row_tensor,
+                 column_tensor,
+                 author_tensor,
+                 title_tensor,
+                 tags_tensor,
+                 input_tensor,
+                 max_words):
+        """
+        input_tensor: [1, 1] SOS_id
+        """
+
+        row_embedded = self.row_embedding(row_tensor) # [1, 1, embedding_size]
+        column_embedded = self.column_embedding(column_tensor) #[1, 1, embedding_size]
+        author_embedded = self.author_embedding(author_tensor) #[1, 1, embedding_size]
+
+        # encoder
+        hidden_final, memory_bank, _ = self.encoder(title_tensor, row_embedded, column_embedded, author_embedded)
+
+        # hidden_final: [num_layers * bidirection_num, 1, hidden_size // 2]
+        self.decoder.init_state(hidden_final)
+
+        poet = []
+        for i in range(max_words):
+            output, attn = self.decoder(input_tensor, memory_bank)
+            output = self.output_linear(output) # [1, 1, vocab_size]
+            output = self.log_softmax(output) # [1, 1, vocab_size]
+
+            input_tensor = output.argmax(dim=2).detach().view(-1, 1)
+            poet.append(input_tensor.item())
+
+        return poet
 
 
 
