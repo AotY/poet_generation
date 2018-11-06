@@ -55,6 +55,8 @@ class PoetDataset:
                 # for simple
                 if row_num >= 10 and column_num >= 10:
                     continue
+                if len(title) < 1 or len(paragraphs) > 110:
+                    continue
 
                 _datas.append((row_num, column_num, author, title, paragraphs, tags))
                 self.max_row = max(row_num, self.max_row)
