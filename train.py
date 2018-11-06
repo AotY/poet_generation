@@ -171,8 +171,8 @@ def train_epoch():
                         is_best=False,
                         filename=os.path.join(opt.model_path, 'checkpoint.epoch-%d.pth' % (epoch)))
 
-        # eval 
-        eval()
+        # eval
+        evaluate()
 
 
 def test():
@@ -208,7 +208,7 @@ def test():
                 start_time = time.time()
 
 
-def eval():
+def evaluate():
     model.eval()
     with torch.no_grad():
         datas = dataset.load_all('eval')
