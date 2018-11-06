@@ -93,8 +93,8 @@ dataset = PoetDataset(args.data_path,
                       split)
 
 model = PoetGenModel(vocab_size,
-                     dataset.max_row,
-                     dataset.max_cloumn,
+                     dataset.max_row + 1,
+                     dataset.max_cloumn + 1,
                      dataset.author_num,
                      args.embedding_size,
                      args.hidden_size,
